@@ -5,8 +5,8 @@ import re
 
 app = FastAPI(title="Tounsi Sentiment API", version="1.0")
 
-model = joblib.load("models/sentiment_model.pkl")
-vectorizer = joblib.load("models/tfidf_vectorizer.pkl")
+model = joblib.load("models/sentiment_model_char.pkl")
+vectorizer = joblib.load("models/tfidf_vectorizer_char.pkl")
 
 def clean_text(text):
     text = str(text).lower()
