@@ -1,10 +1,12 @@
-import streamlit as st
+import os
+
 import requests
+import streamlit as st
 
-API_URL = "http://127.0.0.1:8000/predict"
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000/predict")
 
-st.set_page_config(page_title="Tounsi Sentiment", page_icon="🇹🇳")
-st.title("🇹🇳 Analyse de sentiment en tounsi")
+st.set_page_config(page_title="Tounsi Sentiment", page_icon="💬")
+st.title("💬 Analyse de sentiment en tounsi")
 st.write("Écris un commentaire en arabizi / dialecte tunisien et découvre son sentiment.")
 
 text = st.text_area("Ton texte :", placeholder="nhebbou barcha hedhi application")
@@ -27,5 +29,9 @@ if st.button("Analyser"):
             else:
                 st.info(f"🤔 Incertain ({conf:.0%}), le modèle n'est pas sûr")
             st.progress(conf)
+        except requests.exceptions.HTTPError as e:
+            st.error(f"Erreur de l'API : {e.response.text}")
         except requests.exceptions.RequestException:
             st.error("Impossible de joindre l'API. Est-ce que uvicorn tourne ?")
+
+st.caption("Modèle : TF-IDF n-grammes de caractères + Logistic Regression (85 % d'accuracy)")
